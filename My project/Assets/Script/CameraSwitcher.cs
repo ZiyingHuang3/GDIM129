@@ -3,7 +3,9 @@ using UnityEngine.UI;
 
 public class CameraSwitcher : MonoBehaviour
 {
-    public Camera[] cameras;
+    public RawImage monitorScreen;
+
+    public RenderTexture[] cameraViews;
 
     public Button leftButton;
     public Button rightButton;
@@ -20,17 +22,14 @@ public class CameraSwitcher : MonoBehaviour
 
     private void ShowCamera(int index)
     {
-        for (int i = 0; i < cameras.Length; i++)
-        {
-            cameras[i].gameObject.SetActive(i == index);
-        }
+        monitorScreen.texture = cameraViews[index];
     }
 
     public void NextCamera()
     {
         currentIndex++;
 
-        if (currentIndex >= cameras.Length)
+        if (currentIndex >= cameraViews.Length)
         {
             currentIndex = 0;
         }
@@ -44,14 +43,9 @@ public class CameraSwitcher : MonoBehaviour
 
         if (currentIndex < 0)
         {
-            currentIndex = cameras.Length - 1;
+            currentIndex = cameraViews.Length - 1;
         }
 
         ShowCamera(currentIndex);
-    }
-
-    public int GetCurrentCameraIndex()
-    {
-        return currentIndex;
     }
 }
