@@ -27,7 +27,8 @@ public class MonsterMovementController : MonoBehaviour
     public AudioClip jumpscareSound;
     private bool isJumpscaring = false;
     public float jumpscareDuration = 1.5f;
-
+    public GameObject scareImage;
+    public float scareImageDuration = 0.5f;
     [Header("Broken Screen")]
     public GameObject thisCameraBrokenScreen;
     public CameraSwitcher cameraManager;
@@ -122,10 +123,23 @@ public class MonsterMovementController : MonoBehaviour
 
         yield return new WaitForSeconds(jumpscareDuration);
 
+        if (scareImage != null)
+        {
+            scareImage.SetActive(true);
+        }
+
+        yield return new WaitForSeconds(scareImageDuration);
+
+        if (scareImage != null)
+        {
+            scareImage.SetActive(false);
+        }
+
         if (cameraManager != null)
         {
             cameraManager.BreakCamera(monsterCameraIndex);
         }
+
         if (batteryController != null)
         {
             batteryController.BreakMonitor();
