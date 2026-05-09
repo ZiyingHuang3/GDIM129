@@ -10,10 +10,16 @@ public class CameraSwitcher : MonoBehaviour
     public Button leftButton;
     public Button rightButton;
 
-    private int currentIndex = 0;
+    [Header("Broken Camera")]
+    public GameObject brokenImage;
+
+    public bool[] brokenStates;
+    public int currentIndex = 0;
 
     private void Start()
     {
+        brokenStates = new bool[cameraViews.Length];
+
         ShowCamera(currentIndex);
 
         leftButton.onClick.AddListener(PreviousCamera);
@@ -23,6 +29,22 @@ public class CameraSwitcher : MonoBehaviour
     private void ShowCamera(int index)
     {
         monitorScreen.texture = cameraViews[index];
+
+        RefreshBrokenImage();
+    }
+
+    void RefreshBrokenImage()
+    {
+        if (brokenImage == null) return;
+
+        brokenImage.SetActive(brokenStates[currentIndex]);
+    }
+
+    public void BreakCamera(int index)
+    {
+        brokenStates[index] = true;
+
+        RefreshBrokenImage();
     }
 
     public void NextCamera()

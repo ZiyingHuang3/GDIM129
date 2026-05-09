@@ -3,35 +3,48 @@ using UnityEngine.UI;
 
 public class MonitorBatteryController : MonoBehaviour
 {
-    public GameObject cameraScreen;   
-    public Slider batterySlider;      
+    [Header("Monitor")]
+    public GameObject cameraScreen;
+
+    [Header("Battery")]
+    public Slider batterySlider;
     public float maxBattery = 100f;
     public float drainSpeed = 5f;
-
-    private float currentBattery;
+    public MonsterMovementController monster;
+    public float currentBattery;
     private bool monitorOpen = false;
 
     private void Start()
     {
         currentBattery = maxBattery;
+
         batterySlider.maxValue = maxBattery;
         batterySlider.value = currentBattery;
 
-        cameraScreen.SetActive(true); 
+
+        cameraScreen.SetActive(false);
     }
 
     private void Update()
     {
-        if (monitorOpen && currentBattery > 0)
+
+        if (Input.GetKeyDown(KeyCode.E))
         {
-            currentBattery -= drainSpeed * Time.deltaTime;
-            currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
-            batterySlider.value = currentBattery;
+            ToggleMonitor();
         }
 
-        if (currentBattery <= 0)
+        if (monitorOpen)
         {
-            CloseMonitor();
+            currentBattery -= drainSpeed * Time.deltaTime;
+
+            currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+
+            batterySlider.value = currentBattery;
+
+            if (currentBattery <= 0)
+            {
+                CloseMonitor();
+            }
         }
     }
 
@@ -52,12 +65,36 @@ public class MonitorBatteryController : MonoBehaviour
         if (currentBattery <= 0) return;
 
         monitorOpen = true;
-        cameraScreen.SetActive(false);
+
+
+        cameraScreen.SetActive(true);
+        if (monster != null)
+        {
+            monster.RetreatOneStage();
+        }
     }
 
     public void CloseMonitor()
     {
         monitorOpen = false;
-        cameraScreen.SetActive(true);
+
+        cameraScreen.SetActive(false);
+    }
+    public void UseBattery(float amount)
+    {
+        currentBattery -= amount;
+
+        currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+
+        batterySlider.value = currentBattery;
+
+        if (currentBattery <= 0)
+        {
+            CloseMonitor();
+        }
+    }
+    public void BreakMonitor()
+    {
+        monitorOpen = false;
     }
 }
