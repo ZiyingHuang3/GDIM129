@@ -14,7 +14,7 @@ public class SoundRepeller : MonoBehaviour
 
     [Header("Audio")]
     public AudioSource audioSource;
-    public AudioClip repelSound;
+    public AudioClip[] repelSounds;
 
     private bool canUse = true;
 
@@ -32,9 +32,14 @@ public class SoundRepeller : MonoBehaviour
 
         monster.RetreatOneStage();
 
-        if (audioSource != null && repelSound != null)
+        if (audioSource != null && repelSounds != null)
         {
-            audioSource.PlayOneShot(repelSound);
+            if (repelSounds.Length > 0)
+            {
+                int randomIndex = Random.Range(0, repelSounds.Length);
+
+                audioSource.PlayOneShot(repelSounds[randomIndex]);
+            }
         }
 
         StartCoroutine(CooldownRoutine());
