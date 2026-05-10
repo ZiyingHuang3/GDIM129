@@ -14,6 +14,8 @@ public class MonsterMovementController : MonoBehaviour
     [Header("Move")]
     public float moveSpeed = 3f;
     public float moveInterval = 5f;
+    [Header("Health")]
+    public HealthManager healthManager;
 
     [Header("Attack")]
     public int damage = 20;
@@ -122,6 +124,11 @@ public class MonsterMovementController : MonoBehaviour
         }
 
         yield return new WaitForSeconds(jumpscareDuration);
+        
+        if (healthManager != null)
+        {
+          healthManager.TakeDamage(damage);
+        }
 
         if (scareImage != null)
         {

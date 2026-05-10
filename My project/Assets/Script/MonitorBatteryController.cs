@@ -26,27 +26,30 @@ public class MonitorBatteryController : MonoBehaviour
     }
 
     private void Update()
+{
+    if (Input.GetKeyDown(KeyCode.E))
     {
-
-        if (Input.GetKeyDown(KeyCode.E))
-        {
-            ToggleMonitor();
-        }
-
-        if (monitorOpen)
-        {
-            currentBattery -= drainSpeed * Time.deltaTime;
-
-            currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
-
-            batterySlider.value = currentBattery;
-
-            if (currentBattery <= 0)
-            {
-                CloseMonitor();
-            }
-        }
+        ToggleMonitor();
     }
+
+    if (monitorOpen)
+    {
+        currentBattery -= drainSpeed * Time.deltaTime;
+    }
+    else
+    {
+        currentBattery += drainSpeed * Time.deltaTime;
+    }
+
+    currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+
+    batterySlider.value = currentBattery;
+
+    if (currentBattery <= 0 && monitorOpen)
+    {
+        CloseMonitor();
+    }
+}
 
     public void ToggleMonitor()
     {

@@ -2882,6 +2882,7 @@ MonoBehaviour:
   runPoint: {fileID: 797398252}
   moveSpeed: 3
   moveInterval: 5
+  healthManager: {fileID: 1689349702}
   damage: 20
   jumpscarePoint: {fileID: 1464037874}
   audioSource: {fileID: 627042668}
@@ -3840,6 +3841,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1689349701}
   - component: {fileID: 1689349700}
+  - component: {fileID: 1689349702}
   m_Layer: 0
   m_Name: GameManager
   m_TagString: Untagged
@@ -3864,7 +3866,7 @@ MonoBehaviour:
   maxBattery: 100
   drainSpeed: 2
   monster: {fileID: 0}
-  currentBattery: 0
+  currentBattery: 100
 --- !u!4 &1689349701
 Transform:
   m_ObjectHideFlags: 0
@@ -3880,6 +3882,21 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1689349702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1689349699}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8441365b55dfc4d7a9c13838dd4084bc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthSlider: {fileID: 1657727142}
+  maxHealth: 100
+  currentHealth: 100
 --- !u!1 &1692115838
 GameObject:
   m_ObjectHideFlags: 0
