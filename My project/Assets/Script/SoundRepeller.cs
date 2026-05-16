@@ -2,15 +2,18 @@ using UnityEngine;
 
 public class SoundRepeller : MonoBehaviour
 {
-    [Header("Monster")]
-    public MonsterMovementController monster;
+    [Header("Camera")]
+    public CameraSwitcher cameraSwitcher;
+
+    [Header("Monster By Camera")]
+    public MonsterMovementController[] monsters;
 
     [Header("Battery")]
     public MonitorBatteryController batteryController;
 
     [Header("Settings")]
-    public float batteryCost = 15f;
-    public float cooldown = 5f;
+    public float batteryCost = 5f;
+    public float cooldown = 3f;
 
     [Header("Audio")]
     public AudioSource audioSource;
@@ -22,24 +25,22 @@ public class SoundRepeller : MonoBehaviour
     {
         if (!canUse) return;
 
-
         if (batteryController.currentBattery < batteryCost)
             return;
 
-
         batteryController.UseBattery(batteryCost);
 
+        int index = cameraSwitcher.currentIndex;
 
-        monster.RetreatOneStage();
-
-        if (audioSource != null && repelSounds != null)
+        if (index >= 0 && index < monsters.Length && monsters[index] != null)
         {
-            if (repelSounds.Length > 0)
-            {
-                int randomIndex = Random.Range(0, repelSounds.Length);
+            monsters[index].RetreatOneStage();
+        }
 
-                audioSource.PlayOneShot(repelSounds[randomIndex]);
-            }
+        if (audioSource != null && repelSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, repelSounds.Length);
+            audioSource.PlayOneShot(repelSounds[randomIndex]);
         }
 
         StartCoroutine(CooldownRoutine());
@@ -48,9 +49,7 @@ public class SoundRepeller : MonoBehaviour
     System.Collections.IEnumerator CooldownRoutine()
     {
         canUse = false;
-
         yield return new WaitForSeconds(cooldown);
-
         canUse = true;
     }
 }
