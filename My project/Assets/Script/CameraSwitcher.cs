@@ -15,6 +15,13 @@ public class CameraSwitcher : MonoBehaviour
 
     public bool[] brokenStates;
     public int currentIndex = 0;
+    public int currentCameraIndex = 0;
+
+
+public bool IsCurrentCameraBroken()
+{
+    return brokenStates[currentCameraIndex];
+}
 
     private void Start()
     {

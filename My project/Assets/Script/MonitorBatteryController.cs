@@ -12,44 +12,44 @@ public class MonitorBatteryController : MonoBehaviour
     public float drainSpeed = 5f;
     public MonsterMovementController monster;
     public float currentBattery;
+
+    [Header("Camera")]
+    public CameraSwitcher cameraSwitcher;
+
     private bool monitorOpen = false;
 
     private void Start()
     {
         currentBattery = maxBattery;
-
         batterySlider.maxValue = maxBattery;
         batterySlider.value = currentBattery;
-
-
         cameraScreen.SetActive(false);
     }
 
     private void Update()
-{
-    if (Input.GetKeyDown(KeyCode.E))
     {
-        ToggleMonitor();
-    }
+        if (Input.GetKeyDown(KeyCode.E))
+        {
+            ToggleMonitor();
+        }
 
-    if (monitorOpen)
-    {
-        currentBattery -= drainSpeed * Time.deltaTime;
-    }
-    else
-    {
-        currentBattery += drainSpeed * Time.deltaTime;
-    }
+        if (monitorOpen)
+        {
+            currentBattery -= drainSpeed * Time.deltaTime;
+        }
+        else
+        {
+            currentBattery += drainSpeed * Time.deltaTime;
+        }
 
-    currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+        currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+        batterySlider.value = currentBattery;
 
-    batterySlider.value = currentBattery;
-
-    if (currentBattery <= 0 && monitorOpen)
-    {
-        CloseMonitor();
+        if (currentBattery <= 0 && monitorOpen)
+        {
+            CloseMonitor();
+        }
     }
-}
 
     public void ToggleMonitor()
     {
@@ -64,40 +64,46 @@ public class MonitorBatteryController : MonoBehaviour
     }
 
     public void OpenMonitor()
+{
+    if (currentBattery <= 0) return;
+
+    if (cameraSwitcher != null &&
+        cameraSwitcher.IsCurrentCameraBroken())
     {
-        if (currentBattery <= 0) return;
-
-        monitorOpen = true;
-
-
-        cameraScreen.SetActive(true);
-        if (monster != null)
-        {
-            monster.RetreatOneStage();
-        }
+        return;
     }
+
+    monitorOpen = true;
+
+    cameraScreen.SetActive(true);
+
+    if (monster != null)
+    {
+        monster.RetreatOneStage();
+    }
+}
 
     public void CloseMonitor()
     {
         monitorOpen = false;
-
         cameraScreen.SetActive(false);
     }
-    public void UseBattery(float amount)
-    {
-        currentBattery -= amount;
 
-        currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
-
-        batterySlider.value = currentBattery;
-
-        if (currentBattery <= 0)
-        {
-            CloseMonitor();
-        }
-    }
     public void BreakMonitor()
     {
-        monitorOpen = false;
+        CloseMonitor();
     }
+    public void UseBattery(float amount)
+{
+    currentBattery -= amount;
+
+    currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+
+    batterySlider.value = currentBattery;
+
+    if (currentBattery <= 0)
+    {
+        CloseMonitor();
+    }
+}
 }

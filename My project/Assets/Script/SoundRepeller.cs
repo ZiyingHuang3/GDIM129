@@ -22,29 +22,32 @@ public class SoundRepeller : MonoBehaviour
     private bool canUse = true;
 
     public void UseRepeller()
+{
+    if (!canUse) return;
+
+    if (cameraSwitcher.IsCurrentCameraBroken())
+        return;
+
+    if (batteryController.currentBattery < batteryCost)
+        return;
+
+    batteryController.UseBattery(batteryCost);
+
+    int index = cameraSwitcher.currentIndex;
+
+    if (index >= 0 && index < monsters.Length && monsters[index] != null)
     {
-        if (!canUse) return;
-
-        if (batteryController.currentBattery < batteryCost)
-            return;
-
-        batteryController.UseBattery(batteryCost);
-
-        int index = cameraSwitcher.currentIndex;
-
-        if (index >= 0 && index < monsters.Length && monsters[index] != null)
-        {
-            monsters[index].RetreatOneStage();
-        }
-
-        if (audioSource != null && repelSounds.Length > 0)
-        {
-            int randomIndex = Random.Range(0, repelSounds.Length);
-            audioSource.PlayOneShot(repelSounds[randomIndex]);
-        }
-
-        StartCoroutine(CooldownRoutine());
+        monsters[index].RetreatOneStage();
     }
+
+    if (audioSource != null && repelSounds.Length > 0)
+    {
+        int randomIndex = Random.Range(0, repelSounds.Length);
+        audioSource.PlayOneShot(repelSounds[randomIndex]);
+    }
+
+    StartCoroutine(CooldownRoutine());
+}
 
     System.Collections.IEnumerator CooldownRoutine()
     {
