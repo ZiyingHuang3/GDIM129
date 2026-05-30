@@ -1,12 +1,15 @@
 using UnityEngine;
 using UnityEngine.UI;
 
+
+
 public class HealthManager : MonoBehaviour
 {
     public Slider healthSlider;
 
     public int maxHealth = 100;
     public int currentHealth;
+    public GameTimeManager gameTimeManager;
 
     private void Start()
     {
@@ -25,7 +28,7 @@ public class HealthManager : MonoBehaviour
 
         if (currentHealth <= 0)
         {
-            GameOver();
+            gameTimeManager.BadEnding();
         }
     }
 

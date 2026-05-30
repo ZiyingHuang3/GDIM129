@@ -10,7 +10,6 @@ public class MonitorBatteryController : MonoBehaviour
     public Slider batterySlider;
     public float maxBattery = 100f;
     public float drainSpeed = 5f;
-    public MonsterMovementController monster;
     public float currentBattery;
 
     [Header("Camera")]
@@ -64,24 +63,12 @@ public class MonitorBatteryController : MonoBehaviour
     }
 
     public void OpenMonitor()
-{
-    if (currentBattery <= 0) return;
-
-    if (cameraSwitcher != null &&
-        cameraSwitcher.IsCurrentCameraBroken())
     {
-        return;
+        if (currentBattery <= 0) return;
+
+        monitorOpen = true;
+        cameraScreen.SetActive(true);
     }
-
-    monitorOpen = true;
-
-    cameraScreen.SetActive(true);
-
-    if (monster != null)
-    {
-        monster.RetreatOneStage();
-    }
-}
 
     public void CloseMonitor()
     {
@@ -94,16 +81,16 @@ public class MonitorBatteryController : MonoBehaviour
         CloseMonitor();
     }
     public void UseBattery(float amount)
-{
-    currentBattery -= amount;
-
-    currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
-
-    batterySlider.value = currentBattery;
-
-    if (currentBattery <= 0)
     {
-        CloseMonitor();
+        currentBattery -= amount;
+
+        currentBattery = Mathf.Clamp(currentBattery, 0, maxBattery);
+
+        batterySlider.value = currentBattery;
+
+        if (currentBattery <= 0)
+        {
+            CloseMonitor();
+        }
     }
-}
 }
