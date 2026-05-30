@@ -14,8 +14,16 @@ public class GameTimeManager : MonoBehaviour
     private int hour = 0;
     private int minute = 0;
 
-    public bool gameEnded=false;
-
+    public bool gameEnded = false;
+    public CameraSwitcher cameraSwitcher;
+    public GameObject goodEndingPanel;
+    public GameObject normalEndingPanel;
+    public GameObject badEndingPanel;
+    public AudioSource bgmSource;
+    public AudioSource endingMusicSource;
+    public AudioClip goodEndingMusic;
+    public AudioClip normalEndingMusic;
+    public AudioClip badEndingMusic;
     void Start()
     {
         UpdateUI();
@@ -27,7 +35,7 @@ public class GameTimeManager : MonoBehaviour
 
         timer += Time.deltaTime;
 
-        if(timer >= realSecondsPerGameMinute)
+        if (timer >= realSecondsPerGameMinute)
         {
             timer -= realSecondsPerGameMinute;
 
@@ -39,15 +47,15 @@ public class GameTimeManager : MonoBehaviour
     {
         minute++;
 
-        if(minute >=60)
+        if (minute >= 60)
         {
-            minute=0;
+            minute = 0;
             hour++;
         }
 
         UpdateUI();
 
-        if(hour >=6)
+        if (hour >= 6)
         {
             EndGame();
         }
@@ -57,25 +65,85 @@ public class GameTimeManager : MonoBehaviour
     {
         int displayHour;
 
-        if(hour==0)
-            displayHour=12;
+        if (hour == 0)
+            displayHour = 12;
         else
-            displayHour=hour;
+            displayHour = hour;
 
         timeText.text =
-            displayHour.ToString("00")
-            + ":"
-            + minute.ToString("00")
+            displayHour
             + " AM";
     }
+    int GetBrokenCameraCount()
+    {
+        int count = 0;
+
+        foreach (bool broken in cameraSwitcher.brokenStates)
+        {
+            if (broken)
+                count++;
+        }
+
+        return count;
+    }
+
+    void PlayEndingMusic(AudioClip clip)
+    {
+        if (endingMusicSource == null || clip == null) return;
+
+        endingMusicSource.clip = clip;
+        endingMusicSource.loop = false;
+        endingMusicSource.Play();
+    }
+    void StopAllGameAudio()
+    {
+        AudioSource[] allAudio = FindObjectsOfType<AudioSource>();
+
+        foreach (AudioSource audio in allAudio)
+        {
+            audio.Stop();
+        }
+    }
+    public void BadEnding()
+    {
+        if (gameEnded) return;
+
+        gameEnded = true;
+
+        StopAllGameAudio();
+
+        badEndingPanel.SetActive(true);
+        PlayEndingMusic(badEndingMusic);
+
+        Time.timeScale = 0f;
+    }
+
 
     void EndGame()
     {
-        gameEnded=true;
+        gameEnded = true;
+        timeText.text = "6 AM";
 
-        timeText.text="06:00 AM";
+        StopAllGameAudio();
 
-        Debug.Log("YOU SURVIVED");
+        int brokenCount = GetBrokenCameraCount();
 
+        if (brokenCount == 0)
+        {
+            goodEndingPanel.SetActive(true);
+            PlayEndingMusic(goodEndingMusic);
+        }
+        else if (brokenCount < 4)
+        {
+            normalEndingPanel.SetActive(true);
+            PlayEndingMusic(normalEndingMusic);
+        }
+        else
+        {
+            badEndingPanel.SetActive(true);
+            PlayEndingMusic(badEndingMusic);
+        }
+
+        Time.timeScale = 0f;
     }
 }
