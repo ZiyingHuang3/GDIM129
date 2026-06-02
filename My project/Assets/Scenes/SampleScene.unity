@@ -8332,7 +8332,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   timeText: {fileID: 1897172017}
-  realSecondsPerGameMinute: 0.5
+  realSecondsPerGameMinute: 0.2
   gameEnded: 0
   cameraSwitcher: {fileID: 1778516322}
   goodEndingPanel: {fileID: 1859052906}
@@ -8846,7 +8846,7 @@ MonoBehaviour:
   m_text: 'As the last monitor goes dark, a hand reaches from the shadows and drags
     you out of the security office.
 
-    
+
 
     Nobody ever sees you again.
 
