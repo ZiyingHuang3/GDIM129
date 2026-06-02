@@ -8336,7 +8336,7 @@ MonoBehaviour:
   gameEnded: 0
   cameraSwitcher: {fileID: 1778516322}
   goodEndingPanel: {fileID: 1859052906}
-  normalEndingPanel: {fileID: 0}
+  normalEndingPanel: {fileID: 1534153851}
   badEndingPanel: {fileID: 1409849853}
   bgmSource: {fileID: 0}
   endingMusicSource: {fileID: 904403714}
