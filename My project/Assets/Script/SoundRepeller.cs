@@ -25,8 +25,6 @@ public class SoundRepeller : MonoBehaviour
 {
     if (!canUse) return;
 
-    if (cameraSwitcher.IsCurrentCameraBroken())
-        return;
 
     if (batteryController.currentBattery < batteryCost)
         return;
